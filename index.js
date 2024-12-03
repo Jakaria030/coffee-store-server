@@ -52,7 +52,30 @@ async function run() {
       res.send(result);
     });
 
-    //delete coffe
+    // update coffee
+    app.put("/coffee/:id", async(req, res) => {
+      const id = req.params.id; 
+      const filter = {_id: new ObjectId(id)};
+      const options = {upsert: true};
+      const updatedCoffee = req.body;
+      const coffee = {
+        $set: {
+          name:updatedCoffee.name,
+          chef:updatedCoffee.chef,
+          supplier:updatedCoffee.supplier,
+          taste:updatedCoffee.taste,
+          category:updatedCoffee.category,
+          details:updatedCoffee.details,
+          price:updatedCoffee.price,
+          photoURL:updatedCoffee.photoURL
+        }
+      };
+
+      const result = await coffeCollection.updateOne(filter, coffee, options);
+      res.send(result);
+    });
+
+    // delete coffe
     app.delete("/coffee/:id", async(req, res) => {
       const id = req.params.id;
       const query = {_id: new ObjectId(id)};
